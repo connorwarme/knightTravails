@@ -1,8 +1,8 @@
 console.log(`knight`)
 
-const knightMoves = (start, end) => {
+// const knightMoves = (start, end) => {
 
-}
+// }
 
 // create board
 const boardContainer = document.querySelector('div.boardContainer')
@@ -57,9 +57,24 @@ const possibleMoves = (input) => {
             return index;
         }
     })
-
-
     return filtered;
 }
 // board[17] = ['x', 'y'];
 console.log(possibleMoves([0,0]));
+
+// attempt at recursive knightMoves
+const knightMoves = (gameboard, move, goal, depth = 0) => {
+    const possibleMoves = possibleMoves(move);
+    // end condition, don't think this is right... !!!
+    if (move[0] == goal[0] && move[1] == goal[1]) {
+        return move;
+    }
+    const moves = [];
+    for (let i = 0; i<possibleMoves.length; i++) {
+        const move = possibleMoves[i];
+        // have to edit the board
+        // have to call the recursion on edited board
+        // have to remove the move
+        // have to push the move into the moves array
+    }
+}
