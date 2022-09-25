@@ -19,7 +19,7 @@ const createBoard = () => {
     });
     return graph;
     }
-console.log(createBoard());
+const board = createBoard();
 
 // so i have an array with all the grid squares
 // check to see if the move is on the board
@@ -29,6 +29,17 @@ const onTheBoard = (input) => {
     } else {
         return true;
     }
+}
+// check to see if square has already been played
+const squareTaken = (input, array) => {
+    let value = array.find(index => {
+        if (index[0] == input[0] && index[1] == input[1]) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+    return value;
 }
 // input current array position, returns an array of possible moves (on the board)
 const possibleMoves = (input) => {
@@ -42,7 +53,7 @@ const possibleMoves = (input) => {
     array.push([input[0] - 2, input[1] + 1]);
     array.push([input[0] - 2, input[1] - 1]);
     let filtered = array.filter(index => {
-        if (onTheBoard(index)) {
+        if (onTheBoard(index) && squareTaken(index, board)) {
             return index;
         }
     })
@@ -50,4 +61,5 @@ const possibleMoves = (input) => {
 
     return filtered;
 }
+// board[17] = ['x', 'y'];
 console.log(possibleMoves([0,0]));
