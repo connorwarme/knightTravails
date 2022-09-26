@@ -63,18 +63,37 @@ const possibleMoves = (input) => {
 console.log(possibleMoves([0,0]));
 
 // attempt at recursive knightMoves
-const knightMoves = (gameboard, move, goal, depth = 0) => {
-    const possibleMoves = possibleMoves(move);
+const knightMoves = (move, goal) => {
     // end condition, don't think this is right... !!!
     if (move[0] == goal[0] && move[1] == goal[1]) {
         return move;
+    } else if (move == null) {
+        return move;
     }
-    const moves = [];
-    for (let i = 0; i<possibleMoves.length; i++) {
-        const move = possibleMoves[i];
+    const queue = [move];
+    while (queue.length != 0) {
+        let pop = queue.shift();
+        console.log(queue);
+        let moves = possibleMoves(pop);
+        if (moves) {
+            for (let i = 0; i<moves.length; i++) {
+                queue.push(moves[i]);
+            }
+        if (endCondition(pop, goal)) {
+            console.log('fire!');
+            return pop;
+        }
+        }
+}
         // have to edit the board
         // have to call the recursion on edited board
         // have to remove the move
         // have to push the move into the moves array
+}
+const endCondition = (move, goal) => {
+    if (move[0] == goal[0] && move[1] == goal[1]) {
+        return move;
+    } else if (move == null) {
+        return move;
     }
 }
