@@ -1,99 +1,90 @@
 console.log(`knight`)
 
-// const knightMoves = (start, end) => {
-
-// }
-
 // create board
 const boardContainer = document.querySelector('div.boardContainer')
 const createBoard = () => {
-    let graph = [];
     let grid = [];
     for (let i = 0; i < 8; i++) {
-        grid.push(i);
-    }
-    grid.forEach(index => {
+        let item = [];
+        grid.push(item);
         for (let i = 0; i< 8; i++) {
-            graph.push([grid[index], i]);
+            item.push(Number('0'));
         }
-    });
-    return graph;
+    };
+    return grid;
     }
 const board = createBoard();
+
+const cellFactory = (x, y, depth, parent) => {
+    return {x, y, depth, parent};
+}
 
 // so i have an array with all the grid squares
 // check to see if the move is on the board
 const onTheBoard = (input) => {
-    if (input[0] < 0 || input[0] > 7 || input[1] < 0 || input[1] > 7) {
+    if (input.x < 0 || input.x > 7 || input.y < 0 || input.y > 7) {
         return false;
     } else {
         return true;
     }
 }
 // check to see if square has already been played
-const squareTaken = (input, array) => {
-    let value = array.find(index => {
-        if (index[0] == input[0] && index[1] == input[1]) {
+const squareAvailable = (input) => {
+    if (board[input.x][input.y] == 0) {
             return true;
         } else {
             return false;
         }
-    });
-    return value;
 }
 // input current array position, returns an array of possible moves (on the board)
 const possibleMoves = (input) => {
     let array = [];
-    array.push([input[0] + 1, input[1] + 2]);
-    array.push([input[0] + 1, input[1] - 2]);
-    array.push([input[0] + 2, input[1] + 1]);
-    array.push([input[0] + 2, input[1] - 1]);
-    array.push([input[0] - 1, input[1] + 2]);
-    array.push([input[0] - 1, input[1] - 2]);
-    array.push([input[0] - 2, input[1] + 1]);
-    array.push([input[0] - 2, input[1] - 1]);
+    array.push([input.x + 1, input.y + 2]);
+    array.push([input.x + 1, input.y - 2]);
+    array.push([input.x + 2, input.y + 1]);
+    array.push([input.x + 2, input.y - 1]);
+    array.push([input.x - 1, input.y + 2]);
+    array.push([input.x - 1, input.y - 2]);
+    array.push([input.x - 2, input.y + 1]);
+    array.push([input.x - 2, input.y - 1]);
     let filtered = array.filter(index => {
-        if (onTheBoard(index) && squareTaken(index, board)) {
+        if (onTheBoard(index) && squareAvailable(input)) {
             return index;
         }
     })
     return filtered;
 }
-// board[17] = ['x', 'y'];
-console.log(possibleMoves([0,0]));
+
+const xMoves = [1, 1, 2, 2, -1, -1, -2, -2];
+const yMoves = [2, -2, 1, -1, 2, -2, 1, -1];
 
 // attempt at recursive knightMoves
-const knightMoves = (move, goal) => {
-    // end condition, don't think this is right... !!!
-    if (move[0] == goal[0] && move[1] == goal[1]) {
-        return move;
-    } else if (move == null) {
-        return move;
-    }
-    const queue = [move];
+const knightMoves = (move, goal, depth) => {
+    const cell = cellFactory(move[0], move[1], 0);
+    const queue = [cell];
+    console.log(cell);
     while (queue.length != 0) {
         let pop = queue.shift();
         console.log(queue);
-        let moves = possibleMoves(pop);
-        if (moves) {
-            for (let i = 0; i<moves.length; i++) {
-                queue.push(moves[i]);
-            }
-        if (endCondition(pop, goal)) {
-            console.log('fire!');
+        if (pop.x == goal[0] && pop.y == goal[1]) {
             return pop;
         }
+        let x;
+        let y;
+        for (let i = 0; i<8; i++) {
+            x = pop.x + xMoves[i];
+            y = pop.y + yMoves[i];
+            let celly = cellFactory(x, y, depth + 1, pop);
+            if (onTheBoard(celly) && squareAvailable(celly)) {
+                board[x][y] = 1;
+                queue.push(celly);
+            }
         }
+    }
 }
         // have to edit the board
         // have to call the recursion on edited board
         // have to remove the move
         // have to push the move into the moves array
-}
-const endCondition = (move, goal) => {
-    if (move[0] == goal[0] && move[1] == goal[1]) {
-        return move;
-    } else if (move == null) {
-        return move;
-    }
-}
+
+console.log(knightMoves([0,0], [3,3], 0));
