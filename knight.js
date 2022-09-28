@@ -1,5 +1,3 @@
-console.log(`knight`)
-
 // create board
 const boardContainer = document.querySelector('div.boardContainer')
 const createBoard = () => {
@@ -59,13 +57,11 @@ const xMoves = [1, 1, 2, 2, -1, -1, -2, -2];
 const yMoves = [2, -2, 1, -1, 2, -2, 1, -1];
 
 // attempt at recursive knightMoves
-const knightMoves = (move, goal, depth) => {
+const knightMoves = (move, goal, depth = 0) => {
     const cell = cellFactory(move[0], move[1], 0);
     const queue = [cell];
-    console.log(cell);
     while (queue.length != 0) {
         let pop = queue.shift();
-        console.log(queue);
         if (pop.x == goal[0] && pop.y == goal[1]) {
             return pop;
         }
@@ -82,9 +78,25 @@ const knightMoves = (move, goal, depth) => {
         }
     }
 }
-        // have to edit the board
-        // have to call the recursion on edited board
-        // have to remove the move
-        // have to push the move into the moves array
 
-console.log(knightMoves([0,0], [3,3], 0));
+let x = (knightMoves([0,0], [3,3]));
+const print = (value) => {
+    let array = [value];
+    while (parentCheck(value)) {
+        array.unshift(parentCheck(value));
+        value.parent = value.parent.parent;
+    }
+    for (let i = 0; i<array.length; i++) {
+        console.log(`Move #${i}: ${array[i].x}, ${array[i].y}`);
+    }
+}
+const parentCheck = (value) => {
+    if (value.parent) {
+        return value.parent;
+    } else {
+        return false;
+    }
+}
+console.log(`Example: start position [0,0], end position [3,3]`)
+print(x)
+console.log('To utilize, assign a variable to knightMoves([starting position], [end position]), then call print(variable name)');
